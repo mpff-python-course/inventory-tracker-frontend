@@ -12,6 +12,13 @@ const inventory: Product[] = [
   new PhysicalProduct('PH002', 'Smartphone', 699.00, 0.4),
   new DigitalProduct('DG002', 'Software License', 249.00, 0.1)
 ];
+// Loop through each product and apply a discount if applicable
+inventory.forEach(product => {
+  // Apply a 10% discount to physical products only
+  if ('applyDiscount' in product) {
+    (product as any).applyDiscount(10); // quick and safe cast
+  }
+});
 
 // Loop through each product, display details and price including tax
 inventory.forEach(product => {
