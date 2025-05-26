@@ -1,41 +1,36 @@
-// src/models/PhysicalProduct.ts
-
 import { Product } from './Product';
-import { DiscountableProduct } from './DiscountableProduct'; // Importing the interface we want to implement
+import { DiscountableProduct } from './DiscountableProduct';
 
-// The PhysicalProduct class represents items you can touch, like gadgets or clothes.
-// It extends Product (inherits its properties and methods), and now it also implements
-// the DiscountableProduct interface to allow applying discounts.
-
+// Represents a tangible product with weight.
+// Implements DiscountableProduct so we can apply percentage discounts.
 export class PhysicalProduct extends Product implements DiscountableProduct {
-  // The 'weight' is unique to physical products. It's private to encapsulate the data.
   constructor(
     sku: string,
     name: string,
     price: number,
     private weight: number
   ) {
-    super(sku, name, price); // Call the constructor of the base Product class
+    super(sku, name, price);
   }
 
-  // A getter method to return weight in a readable format, like "2.5 kg"
+  // Returns formatted weight like "2.5 kg"
   get formattedWeight(): string {
     return `${this.weight} kg`;
   }
 
-  // Override the base class method to apply a 10% tax
+  // Automatically apply a 10% discount if the product is heavy
   getPriceWithTax(): number {
-    return this.price + this.price * 0.1;
+    const basePrice = this.weight > 1 ? this.price * 0.9 : this.price; // 10% off if > 1kg
+    const taxRate = 0.1;
+    return basePrice + basePrice * taxRate;
   }
 
-  // Override to show full product details, including weight
+  // Standard product details including weight
   displayDetails(): string {
     return `${super.displayDetails()}, Weight: ${this.formattedWeight}`;
   }
 
-  // This method comes from the DiscountableProduct interface.
-  // It allows us to reduce the price by a given percentage.
-  // For example, 10% discount means multiplying the price by 0.9
+  // Manual discount (interface method)
   applyDiscount(percentage: number): void {
     this.price = this.price * (1 - percentage / 100);
   }
