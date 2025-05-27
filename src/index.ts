@@ -7,7 +7,6 @@ interface Product {
   type: 'Physical' | 'Digital';
 }
 
-// Initial mock data
 const inventory: Product[] = [
   { sku: 'PH001', name: 'Wireless Headphones', price: 120.0, type: 'Physical' },
   { sku: 'DG001', name: 'E-Book: Learn TypeScript', price: 19.99, type: 'Digital' },
@@ -15,7 +14,10 @@ const inventory: Product[] = [
   { sku: 'DG002', name: 'Software License', price: 249.0, type: 'Digital' }
 ];
 
-// Tax/discount logic
+// Track whether we’re showing detailed view or simple list
+let showDetailed = false;
+
+// Logic to apply tax and discount
 function calculatePriceWithTax(product: Product): number {
   const discountRate = 0.1;
   const taxRate = product.type === 'Physical' ? 0.1 : 0;
@@ -23,28 +25,64 @@ function calculatePriceWithTax(product: Product): number {
   return discounted + discounted * taxRate;
 }
 
-// Render list to #app
+// Reusable render logic
 function renderInventory(data: Product[]) {
   const app = document.getElementById('app');
   if (!app) return;
+  app.innerHTML = '';
 
-  app.innerHTML = ''; // clear previous render
-  const list = document.createElement('ul');
+  if (!showDetailed) {
+    // Simple list view
+    const list = document.createElement('ul');
+    data.forEach((product) => {
+      const finalPrice = calculatePriceWithTax(product).toFixed(2);
+      const item = document.createElement('li');
+      item.textContent = `${product.name} (${product.type}) — $${product.price.toFixed(2)} → Final: $${finalPrice}`;
+      list.appendChild(item);
+    });
+    app.appendChild(list);
+  } else {
+    // Detailed table view
+    const table = document.createElement('table');
+    table.border = '1';
+    table.style.borderCollapse = 'collapse';
+    table.style.marginTop = '1rem';
 
-  data.forEach((product) => {
-    const finalPrice = calculatePriceWithTax(product).toFixed(2);
-    const item = document.createElement('li');
-    item.textContent = `${product.name} (${product.type}) — $${product.price.toFixed(2)} → Final: $${finalPrice}`;
-    list.appendChild(item);
-  });
-
-  app.appendChild(list);
+    table.innerHTML = `
+      <thead>
+        <tr>
+          <th>SKU</th><th>Name</th><th>Type</th>
+          <th>Price</th><th>Discount</th><th>Tax</th><th>Final</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${data.map((p) => {
+          const discount = p.price * 0.1;
+          const afterDiscount = p.price - discount;
+          const tax = p.type === 'Physical' ? afterDiscount * 0.1 : 0;
+          const total = afterDiscount + tax;
+          return `
+            <tr>
+              <td>${p.sku}</td>
+              <td>${p.name}</td>
+              <td>${p.type}</td>
+              <td>$${p.price.toFixed(2)}</td>
+              <td>$${discount.toFixed(2)}</td>
+              <td>$${tax.toFixed(2)}</td>
+              <td><strong>$${total.toFixed(2)}</strong></td>
+            </tr>
+          `;
+        }).join('')}
+      </tbody>
+    `;
+    app.appendChild(table);
+  }
 }
 
-// Initial display
+// Default view
 renderInventory(inventory);
 
-// Sort buttons
+// Sorting
 document.getElementById('sortName')?.addEventListener('click', () => {
   const sorted = [...inventory].sort((a, b) => a.name.localeCompare(b.name));
   renderInventory(sorted);
@@ -55,7 +93,7 @@ document.getElementById('sortPrice')?.addEventListener('click', () => {
   renderInventory(sorted);
 });
 
-// Form handling
+// Form submission
 document.getElementById('productForm')?.addEventListener('submit', (e) => {
   e.preventDefault();
 
@@ -74,4 +112,10 @@ document.getElementById('productForm')?.addEventListener('submit', (e) => {
   (document.getElementById('productForm') as HTMLFormElement).reset();
 });
 
-
+// Toggle view mode
+document.getElementById('toggleView')?.addEventListener('click', () => {
+  showDetailed = !showDetailed;
+  const button = document.getElementById('toggleView')!;
+  button.textContent = showDetailed ? 'Show Simple View' : 'Show Details';
+  renderInventory(inventory);
+});
