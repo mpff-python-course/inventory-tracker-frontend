@@ -3,10 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <title>Inventory Tracker UI</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    li {
+      margin-bottom: 0.75rem;
+    }
+    .highlight {
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <h1>Inventory Tracker Frontend</h1>
+  <p>This interface displays product prices, discounts, and tax-calculated totals.</p>
+
+  <!-- Inventory list gets injected into this div -->
   <div id="app"></div>
-  <script type="module" src="../src/index.ts"></script>
+
+  <!-- ✅ This loads the actual frontend logic -->
+  <script type="module" src="/src/index.ts"></script>
 </body>
 </html>
