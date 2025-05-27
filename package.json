@@ -1,16 +1,16 @@
 {
-  "name": "inventory-tracker",
+  "name": "inventory-tracker-frontend",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "A simple frontend for the Inventory Tracker project using Parcel and TypeScript",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "parcel public/index.html --open",
+    "build": "parcel build public/index.html"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
-    "@types/node": "^22.15.21",
-    "typescript": "^5.8.3"
+    "parcel": "^2.9.3",
+    "typescript": "^5.3.3"
   }
 }
