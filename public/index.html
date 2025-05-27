@@ -8,17 +8,31 @@
       font-family: Arial, sans-serif;
       padding: 2rem;
     }
+
     h1 {
       font-size: 1.75rem;
       margin-bottom: 1rem;
     }
+
+    form {
+      margin-bottom: 1rem;
+    }
+
+    input, select, button {
+      margin-right: 0.5rem;
+      padding: 0.25rem 0.5rem;
+      font-size: 1rem;
+    }
+
     ul {
       list-style: none;
       padding-left: 0;
     }
+
     li {
       margin-bottom: 0.75rem;
     }
+
     .highlight {
       font-weight: bold;
     }
@@ -28,10 +42,29 @@
   <h1>Inventory Tracker Frontend</h1>
   <p>This interface displays product prices, discounts, and tax-calculated totals.</p>
 
-  <!-- Inventory list gets injected into this div -->
+  <!-- ✅ Product Input Form -->
+  <form id="productForm">
+    <input type="text" id="sku" placeholder="SKU" required />
+    <input type="text" id="name" placeholder="Name" required />
+   <input type="number" id="price" placeholder="Price" step="0.01" required />
+
+    <select id="type">
+      <option value="Physical">Physical</option>
+      <option value="Digital">Digital</option>
+    </select>
+    <button type="submit">Add Product</button>
+  </form>
+
+  <!-- ✅ Sorting Buttons -->
+  <div>
+    <button id="sortName">Sort by Name</button>
+    <button id="sortPrice">Sort by Price</button>
+  </div>
+
+  <!-- ✅ Product list injected by JavaScript -->
   <div id="app"></div>
 
-  <!-- ✅ This loads the actual frontend logic -->
+  <!-- ✅ TypeScript entry point -->
   <script type="module" src="/src/index.ts"></script>
 </body>
 </html>
